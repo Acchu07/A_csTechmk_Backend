@@ -1,0 +1,6 @@
+import type { Request, Response } from "express";
+
+export function protectedHandler(req: Request, res: Response) {
+    res.status(200).json("Protected Route");
+}
+  
