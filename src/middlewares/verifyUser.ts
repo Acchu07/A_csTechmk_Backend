@@ -1,13 +1,20 @@
+import { checkAdminPresent } from "../db/dbOperations.ts";
 import type { Request, Response, NextFunction } from "express";
 
-export function verifyUser(req: Request, res: Response, next: NextFunction) {
-    const { email, password } = req.body;
-    if (email === "admin@test.com" && password === "123456") {
-      res.locals.user = { email, role: "admin" };
+
+export async function verifyUser(req: Request, res: Response, next: NextFunction) {
+    const { email, password } : {email: string, password: string} = req.body;
+    const userPresent = await checkAdminPresent(email);
+    if(userPresent === null) return res.status(401).json({ message: "Not There in DB" });
+    if (userPresent && verifyPassword(password, userPresent.password)) {
+      res.locals.user = { email: userPresent.email, role: userPresent.role };
       return next();
     }
     return res.status(401).json({ message: "Invalid Creds" });
-  }
+}
 
-  // TODo Validatation and sanitization middleware prior to this middleware
-  // Might need to refactor this later as this is a db retrieval and check if user exists 
+function verifyPassword(userPassword: string, dbUserPassword: string) {
+    return userPassword === dbUserPassword;
+}
+
+// ToDo encrypt password and store and then decrypt Password and verify

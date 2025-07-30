@@ -21,9 +21,13 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   jwt.verify(token, secretKeyJWT, (err: Error | null, decoded: any) => { 
     if (err) return res.status(401).json({ message: "Invalid Token" });
     res.locals.user = decoded;
+    console.log(res.locals.user)
     next();
   });
 }
 
 
 // ToDo assign decoded a type dont use any
+// ToDo assign user a type dont use any
+// ToDo If cookie expired send 401 and clear cookies. Force relogin
+// MightDo send cookies and auth headers??? but then i will have to check the same when verifying? 
