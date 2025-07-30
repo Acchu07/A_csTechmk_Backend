@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import auth from "../routes/auth.ts";
+import agents from "../routes/agents.ts";
 import cors from "cors";
 import {connectDB} from "../db/mongodbConnect.ts";
 import { verifyToken } from "../middlewares/JWT.ts";
@@ -17,7 +18,7 @@ app.use(cors({
 }));
 app.use(cookieParser(secretCookieParser));
 app.use("/api/auth", auth);
-
+app.use("/api/agent", agents);
 
 app.get("/", verifyToken,(req, res) => {
   console.log('Cookies: ', req.cookies)
@@ -42,3 +43,4 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 //ToDo Check for Any types and remove them or narrow
 //ToDO Use Linter and prettier some code is not readable
 //ToDo Add an Onclose for graceful close of db
+//ToDo Add a rate Limiter

@@ -13,7 +13,6 @@ export function createToken(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
   const token = req.signedCookies.token;
   if (!token) return res.status(401).json({ message: "Unauthorized" });
@@ -21,7 +20,6 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
   jwt.verify(token, secretKeyJWT, (err: Error | null, decoded: any) => { 
     if (err) return res.status(401).json({ message: "Invalid Token" });
     res.locals.user = decoded;
-    console.log(res.locals.user)
     next();
   });
 }
