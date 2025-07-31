@@ -2,6 +2,7 @@ import { dbRetrieveAgents, dbUpdateAgents } from "../db/dbOperations.ts";
 import { calculateTaskDistribution } from "../helperScripts/agentServiceLogic.ts";
 import promiseBasedCSVparser from "../helperScripts/promiseBasedCSVparser.ts";
 import type { Request, Response } from "express";
+import fsPromises from "fs/promises";
 
 export const uploadCSVTaskAlloc = async (req: Request, res: Response) => {
     const [result, agents] = await Promise.all([
@@ -9,9 +10,9 @@ export const uploadCSVTaskAlloc = async (req: Request, res: Response) => {
       dbRetrieveAgents(),
     ]);
     const agentsWithTasks = calculateTaskDistribution(agents,result);
-    const isSuccess = await dbUpdateAgents(agentsWithTasks);
-    if(!isSuccess) return res.status(500).json({ message: "Agents Updated but not all good luck cleaning that up" });
+    await dbUpdateAgents(agentsWithTasks);
    res.status(200).json({ message: "Agents Updated", agentsWithTasks });
+   req.file && await fsPromises.unlink(req.file.path);
 };
   
   // Data in csv can still be different a way to confirm csv and then only push to db

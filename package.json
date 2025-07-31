@@ -8,7 +8,7 @@
     "start": "node --env-file .env dist/index.js",
     "build": "tsc",
     "type-check": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "popdb": "node --env-file .env src/helperScripts/dbModificationScript.js"
   },
   "keywords": [],
   "author": "",

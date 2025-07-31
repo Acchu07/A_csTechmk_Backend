@@ -26,10 +26,10 @@ export async function dbCreateAgent(agent: Agent): Promise<boolean> {
 export async function dbRetrieveAgents(): Promise<Array<Agent>> {
   const db = accessDB();
   if (!db) throw new Error("DB not connected");
-  return await db.collection<Agent>("agents").find().limit(agentAmount).toArray();
+  return await db.collection<Agent>("agents").find({},{projection:{name:1,tasks:1}}).limit(agentAmount).toArray();
 }
 
-export async function dbUpdateAgents(agents: Agent[]): Promise<boolean> {
+export async function dbUpdateAgents(agents: Agent[]): Promise<void> {
   const db = accessDB();
   if (!db) throw new Error("DB not connected");
   const bulkOps = agents.map(agent => ({
@@ -38,6 +38,5 @@ export async function dbUpdateAgents(agents: Agent[]): Promise<boolean> {
       update: { $set: { tasks: agent.tasks } }
     }
   }));
-  const result = await db.collection<Agent>("agents").bulkWrite(bulkOps);
-  return result.matchedCount===result.modifiedCount;
+  await db.collection<Agent>("agents").bulkWrite(bulkOps);
 }

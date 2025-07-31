@@ -38,7 +38,7 @@ app.listen(port, () => {
 
 app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
   console.error(err);
-  res.status(500).json("Something broke!");
+  res.status(500).json({message:"Something broke!"});
 });
 
 
