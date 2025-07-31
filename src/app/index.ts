@@ -6,6 +6,7 @@ import cors from "cors";
 import {connectDB} from "../db/mongodbConnect.ts";
 import { verifyToken } from "../middlewares/JWT.ts";
 import type { Request, Response, NextFunction } from "express";
+import admin from "../routes/admin.ts";
 
 const port = process.env.PORT ?? "Initial Value is null or undefined";
 const secretCookieParser = process.env.COOKIE_PARSER_SECRET ?? "Initial Value is null or undefined";
@@ -19,6 +20,7 @@ app.use(cors({
 app.use(cookieParser(secretCookieParser));
 app.use("/api/auth", auth);
 app.use("/api/agent", agents);
+app.use("/api/admin", admin);
 
 app.get("/", verifyToken,(req, res) => {
   console.log('Cookies: ', req.cookies)
@@ -44,3 +46,4 @@ app.use(function (err: Error, req: Request, res: Response, next: NextFunction) {
 //ToDO Use Linter and prettier some code is not readable
 //ToDo Add an Onclose for graceful close of db
 //ToDo Add a rate Limiter
+// ToDO Change code to factor the new express error handling
