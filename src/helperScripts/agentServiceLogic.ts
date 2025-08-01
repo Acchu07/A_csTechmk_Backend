@@ -6,8 +6,8 @@ export function calculateTaskDistribution(agent: Agent[],result: Array<Task>){
     let i = 0
     for(const task of result){
         // Need to rethink what if there are more than 5 agents it means i will have to retrieve task from every agent to prevent duplicates being allocated.
-        // Seperate tasks collection? With uniqueIDs?
-        // if(isDuplicateTask(agent[i%agentAmount].tasks, task)) continue;
+        // Seperate tasks collection? With uniqueIDs? Or CSV having a unique id would solve this too
+        if(isDuplicateTask(agent[i%agentAmount].tasks, task)) continue;
         agent[i%agentAmount].tasks.push(task); 
         i++;
     }

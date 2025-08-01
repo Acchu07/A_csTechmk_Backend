@@ -7,14 +7,14 @@ import fsPromises from "fs/promises";
 export const uploadCSVTaskAlloc = async (req: Request, res: Response) => {
     const [result, agents] = await Promise.all([
       promiseBasedCSVparser(req),
-      dbRetrieveAgents(),
+      dbRetrieveAgents(), 
     ]);
     const agentsWithTasks = calculateTaskDistribution(agents,result);
     await dbUpdateAgents(agentsWithTasks);
    res.status(200).json({ message: "Agents Updated", agentsWithTasks });
    req.file && await fsPromises.unlink(req.file.path);
 };
-  
+  // Issue - App crashes if no agents in db
   // Data in csv can still be different a way to confirm csv and then only push to db
   // Separate The agents from the list? - Get back to this later
   
